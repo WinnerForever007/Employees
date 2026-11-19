@@ -1,17 +1,17 @@
-public class Rectangle {
-    private int width;
-    private int height;
+public class Rectangle implements Shape {
+    private final double width;
+    private final double height;
 
     //Exercise 2.1
-    public Rectangle(int width, int height) {
+    public Rectangle(double width, double height) {
         //width = width;
         //height = height;
         this.width = width;
         this.height = height;
-        System.out.println(area());
     }
 
-    public int area() {
+    @Override
+    public double area() {
         return width * height;
     }
 

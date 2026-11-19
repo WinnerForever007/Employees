@@ -53,46 +53,27 @@ public class Main {
                 default -> 0;
             };
         }
+
         NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.US);
-        System.out.printf("The total payout should be %s%n",
-                currencyInstance.format(totalSalaries));
-        peopleRegex = "(?<lastName>\\w+),\\s*(?<firstName>\\w+)," +
-                "\\s*(?<dob>\\d{1,2}/\\d{1,2}/\\d{4}),\\s*(?<role>\\w+)," +
-                "\\s*\\{(?<details>.*)\\}\\n";
-        peoplePat = Pattern.compile(peopleRegex);
-        peopleMat = peoplePat.matcher(Main.peopleText);
+
+//        System.out.printf("The total payout should be %s%n",
+//                currencyInstance.format(totalSalaries));
+//        peopleRegex = "(?<lastName>\\w+),\\s*(?<firstName>\\w+)," +
+//                "\\s*(?<dob>\\d{1,2}/\\d{1,2}/\\d{4}),\\s*(?<role>\\w+)," +
+//                "\\s*\\{(?<details>.*)\\}\\n";
+//        peoplePat = Pattern.compile(peopleRegex);
+
+
+        peopleMat = Employee.PEOPLE_PAT.matcher(Main.peopleText);
         totalSalaries = 0;
 
         while (peopleMat.find()) {
-            totalSalaries += switch (peopleMat.group("role")) {
-                case "Programmer" -> {
-                    Programmer programmer = new Programmer(peopleMat.group());
-                    System.out.println(programmer + " " + programmer.getAge() + " years");
-                    yield programmer.getSalary();
-                }
-                case "Manager" -> {
-                    Manager manager = new Manager(peopleMat.group());
-                    System.out.println(manager);
-                    yield manager.getSalary();
-                }
-                case "Analyst" -> {
-                    Analyst analyst = new Analyst(peopleMat.group());
-                    System.out.println(analyst);
-                    yield analyst.getSalary();
-                }
-                case "CEO" -> {
-                    CEO ceo = new CEO(peopleMat.group());
-                    System.out.println(ceo);
-                    yield ceo.getSalary();
-                }
-                default -> 0;
-            };
-
+            Employee employee = Employee.createEmployee(peopleMat.group());
+            System.out.println(employee);
+            totalSalaries += employee.getSalary();
         }
 
         System.out.printf("The total payout should be %s%n",
                 currencyInstance.format(totalSalaries));
-
-
     }
 }
