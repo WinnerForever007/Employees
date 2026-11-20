@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Employee {
+public abstract class Employee implements IEmployee {
     private static final String PEOPLE_REGEX = "(?<lastName>\\w+),\\s*(?<firstName>\\w+)," +
             "\\s*(?<dob>\\d{1,2}/\\d{1,2}/\\d{4}),\\s*(?<role>\\w+)," +
             "\\s*\\{(?<details>.*)\\}\\n?";
@@ -19,9 +19,12 @@ public abstract class Employee {
     protected String firstName;
     protected LocalDate dob;
 
-//    public Employee() {
-//
-//    }
+    protected Employee() {
+        peopleMat = null;
+        lastName = "N/A";
+        firstName = "N/A";
+        dob = null;
+    }
 
     public Employee(String personText) {
         peopleMat = PEOPLE_PAT.matcher(personText);
@@ -32,7 +35,7 @@ public abstract class Employee {
         }
     }
 
-    public static Employee createEmployee(String employeeText) {
+    public static IEmployee createEmployee(String employeeText) {
         Matcher peopleMat = PEOPLE_PAT.matcher(employeeText);
         if(peopleMat.find()) {
             return switch (peopleMat.group("role")) {
@@ -41,10 +44,11 @@ public abstract class Employee {
                 case "Analyst" -> new Analyst(peopleMat.group());
                 case "CEO" -> new CEO(peopleMat.group());
                 case "Intern" -> new Intern(peopleMat.group());
-                default -> new DummyEmployee(employeeText);
+                default -> () -> 0;
             };
         } else {
-            return new DummyEmployee(employeeText);
+            return () -> 0;
+            //return new DummyEmployee(employeeText);
         }
     }
 
@@ -61,6 +65,12 @@ public abstract class Employee {
         @Override
         public double getBonus() {
             return super.getBonus();
+        }
+
+        class MyInnerClass {
+            String getStuff() {
+                return firstName;
+            }
         }
 
         @Override

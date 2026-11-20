@@ -20,7 +20,7 @@ class EmployeeTest {
     @Test
     void testCreateEmployee() {
         int salary = 0;
-        Employee emp = Employee.createEmployee("Flintstone, Fred, 1/1/1900, " +
+        IEmployee emp = Employee.createEmployee("Flintstone, Fred, 1/1/1900, " +
                 "Programmer, {locpd=2000,yoe=10,iq=140}");
         salary = emp.getSalary();
         assertEquals(2_803_000, salary);

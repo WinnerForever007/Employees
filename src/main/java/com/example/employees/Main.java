@@ -68,7 +68,7 @@ public class Main {
         totalSalaries = 0;
 
         while (peopleMat.find()) {
-            Employee employee = Employee.createEmployee(peopleMat.group());
+            IEmployee employee = Employee.createEmployee(peopleMat.group());
             System.out.println(employee);
             totalSalaries += employee.getSalary();
         }
