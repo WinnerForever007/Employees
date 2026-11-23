@@ -46,5 +46,52 @@ class ProgrammerTest {
         assertEquals(5000, salary);
     }
 
+    //Exercise 5.2
+    @Test
+    void testPerformerVariable() {
+        Performer programmer = new Programmer("Brzenk, John, 7/15/1964, Programmer, " +
+                "{locpd=10,yoe=2,iq=100}");
+        assertEquals("song1", programmer.play("song1"));
+    }
+
+    //Exercise 5.5
+    @Test
+    void testChefOrGardenerDescribeSkills() {
+        Programmer prog = new Programmer("Brzenk, John, 7/15/1964, Programmer, " +
+                "{locpd=10,yoe=2,iq=100}");
+        assertEquals("Can cook", prog.describeSkills());
+    }
+
+    //Exercise 5.8
+    @Test
+    void testPatternMatching() {
+        Object employee = new Programmer("Brzenk, John, 7/15/1964, Programmer, " +
+                "{locpd=10,yoe=2,iq=100}");
+        if(employee instanceof Programmer) {
+            Programmer programmer = (Programmer) employee;
+            System.out.println(programmer.getClass());
+        }
+        if(employee instanceof Programmer programmer2) {
+            System.out.println(programmer2.getClass());
+        }
+
+        switch(employee) {
+            case Programmer prog -> System.out.println(prog.getClass());
+            default -> System.out.println("Default case");
+        }
+    }
+
+    //Exercise 5.9
+    @Test
+    void testRecordPatterns() {
+        Object employee = new ProgrammerRecord("John", "Brzenk", 10, 12, 100);
+        String grade = switch(employee) {
+            case ProgrammerRecord(_, _, _, int yoe, _) when yoe >= 10 -> "Senior";
+            case ProgrammerRecord _ -> "Junior";
+            default -> "Unknown";
+        };
+        System.out.println(grade);
+
+    }
 
 }

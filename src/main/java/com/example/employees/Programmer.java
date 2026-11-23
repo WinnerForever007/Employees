@@ -5,7 +5,7 @@ import java.time.Period;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Programmer extends Employee {
+public class Programmer extends Employee implements Performer, Chef, Gardener {
     private static final String PROG_REGEX = "\\w+=(?<locpd>\\w+),\\w+=(?<yoe>\\w+)," +
             "\\w+=(?<iq>\\w+)";
     private static final Pattern PROG_PAT = Pattern.compile(PROG_REGEX);
@@ -13,6 +13,7 @@ public class Programmer extends Employee {
     private int linesOfCode = 0;
     private int yearsOfExp = 0;
     private int iq = 0;
+    private Musician musician;
 
 
     public Programmer(String personText) {
@@ -40,5 +41,18 @@ public class Programmer extends Employee {
         return Period.between(dob, LocalDate.now()).getYears();
     }
 
+    //Exercise 5.1, 5.2
+    @Override
+    public String play(String song) {
+        if(musician == null) {
+            musician = new Musician();
+        }
+        return musician.play(song);
+    }
 
+    //Exercise 5.5
+    @Override
+    public String describeSkills() {
+        return Chef.super.describeSkills();
+    }
 }
