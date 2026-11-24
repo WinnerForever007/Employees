@@ -1,7 +1,7 @@
 package com.example.employees;
 
 import java.text.NumberFormat;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,13 +67,138 @@ public class Main {
         peopleMat = Employee.PEOPLE_PAT.matcher(Main.peopleText);
         totalSalaries = 0;
 
-        while (peopleMat.find()) {
+        //Collections
+        List<IEmployee> employees = new LinkedList<>();
+        populateEmployees(peopleMat, employees);
+
+//        List<String> undesirables = new ArrayList<>();
+//        undesirables.add("Wilma5");
+//        undesirables.add("Barney4");
+//        undesirables.add("Fred2");
+        List<String> undesirables = List.of("Wilma5", "Barney4", "Fred2");
+
+        removeUndesirables(employees, undesirables);
+
+        totalSalaries = tabulateSalaries(employees);
+
+        /*while (peopleMat.find()) {
             IEmployee employee = Employee.createEmployee(peopleMat.group());
             System.out.println(employee);
             totalSalaries += employee.getSalary();
-        }
+        }*/
 
         System.out.printf("The total payout should be %s%n",
                 currencyInstance.format(totalSalaries));
+
+        IEmployee first = employees.get(0);
+        IEmployee second = employees.get(1);
+        IEmployee third = employees.get(2);
+
+        //Exercise 1.1 Collections
+        List<String> listOfNames = new ArrayList<>();
+        listOfNames.add("Name1");
+        listOfNames.add("Name2");
+        listOfNames.add("Name3");
+        listOfNames.add("Name4");
+
+        for(String list : listOfNames) {
+            System.out.println(list);
+        }
+
+        String[] arrayOfNames = {"Name1", "Name2", "Name3"};
+        arrayOfNames = Arrays.copyOf(arrayOfNames, 4);
+        arrayOfNames[3] = "Name4";
+
+        for(String elem : arrayOfNames) {
+            System.out.println(elem);
+        }
+
+        //Exercise 1.4 Collections
+        List<Integer> timing = new ArrayList<>();
+        long start = System.currentTimeMillis();
+        for(int i = 0; i < 100000; i++) {
+            timing.add(0, i);
+        }
+        System.out.println("ArrayList " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+        for(int i = 0; i < 100000; i++) {
+            timing.get(i);
+        }
+        System.out.println((System.currentTimeMillis() - start));
+
+        List<Integer> timing2 = new LinkedList<>();
+        start = System.currentTimeMillis();
+        for(int i = 0; i < 100000; i++) {
+            timing2.add(0, i);
+        }
+        System.out.println("LinkedList " + (System.currentTimeMillis() - start));
+        start = System.currentTimeMillis();
+        for(int i = 0; i < 100000; i++) {
+            timing2.get(i);
+        }
+        System.out.println(System.currentTimeMillis() - start);
+
+        //Exercise 1.5 Collections
+        List<Integer> listOfNumbers = new ArrayList<>();
+        for(int i = 0; i < 10; i++) {
+            listOfNumbers.add(i);
+        }
+        for(Iterator<Integer> it = listOfNumbers.iterator(); it.hasNext(); ) {
+            Integer wholeNumber = it.next();
+                if(wholeNumber % 2 == 0) {
+                    it.remove();
+            }
+        }
+        for(Integer evenNumber : listOfNumbers) {
+            System.out.println(evenNumber);
+        }
+
+        //Exercise 1.6 Collections
+        listOfNumbers = new ArrayList<>();
+        for(int i = 0; i < 10; i++) {
+            listOfNumbers.add(i);
+        }
+        listOfNumbers.removeIf(number -> number % 2 == 0);
+        System.out.println("Exercise 1.6 Collections");
+        for(Integer evenNumber : listOfNumbers) {
+            System.out.println(evenNumber);
+        }
+
+        //Exercise 1.7 Collections
+        List<Integer> newList = new ArrayList<>(List.of(1, 3, 4));
+        newList.add(5);
+        System.out.println(newList);
+
+
+    }
+
+    //Exercise 1.10 Collections
+    private static int tabulateSalaries(List<IEmployee> employees) {
+        int totalSalaries = 0;
+        for(IEmployee worker : employees) {
+            System.out.println(worker);
+            totalSalaries += worker.getSalary();
+        }
+        return totalSalaries;
+    }
+
+    //Exercise 1.10 Collections
+    private static void populateEmployees(Matcher peopleMat, List<IEmployee> employees) {
+        while(peopleMat.find()) {
+            IEmployee employee = Employee.createEmployee((peopleMat.group()));
+            employees.add(employee);
+        }
+    }
+
+    //Exercise 1.10 Collections
+    private static void removeUndesirables(List<IEmployee> employees, List<String> removalNames) {
+        for(Iterator<IEmployee> it = employees.iterator(); it.hasNext();) {
+            IEmployee worker = it.next();
+            if(worker instanceof Employee tempWorker) {
+                if(removalNames.contains(tempWorker.firstName)) {
+                    it.remove();
+                }
+            }
+        }
     }
 }
