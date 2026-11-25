@@ -68,8 +68,30 @@ public class Main {
         totalSalaries = 0;
 
         //Collections
-        List<IEmployee> employees = new LinkedList<>();
+
+
+
+        //Exercise 2.8 Collections
+//        Comparator<IEmployee> employeeComp = Comparator
+//                .comparing((IEmployee e) -> ((Employee) e).getLastName())
+//                .thenComparing(e -> ((Employee) e).getFirstName())
+//                .thenComparing(e -> ((Employee) e).getDob());
+//        Set<IEmployee> employees = new TreeSet<>(employeeComp);
+
+        //Exercise 2.9 Collections
+        Comparator<IEmployee> employeeComp = Comparator
+                .comparingInt(IEmployee::getSalary)
+                .thenComparing(e -> ((Employee) e).getLastName())
+                .thenComparing(e -> ((Employee) e).getFirstName())
+                .thenComparing(e -> ((Employee) e).getDob());
+        Set<IEmployee> employees = new TreeSet<>(employeeComp);
+
+
+        //Exercise 2.6 Collections
+//        Set<IEmployee> employees = new LinkedHashSet<>();
         populateEmployees(peopleMat, employees);
+//        List<IEmployee> employeesList = new ArrayList<>(employees);
+//        System.out.println(employeesList.get(4));
 
 //        List<String> undesirables = new ArrayList<>();
 //        undesirables.add("Wilma5");
@@ -77,7 +99,8 @@ public class Main {
 //        undesirables.add("Fred2");
         List<String> undesirables = List.of("Wilma5", "Barney4", "Fred2");
 
-        removeUndesirables(employees, undesirables);
+        //removeUndesirables(employees, undesirables);
+        System.out.println(employees.size());
 
         totalSalaries = tabulateSalaries(employees);
 
@@ -90,9 +113,9 @@ public class Main {
         System.out.printf("The total payout should be %s%n",
                 currencyInstance.format(totalSalaries));
 
-        IEmployee first = employees.get(0);
-        IEmployee second = employees.get(1);
-        IEmployee third = employees.get(2);
+//        IEmployee first = employees.get(0);
+//        IEmployee second = employees.get(1);
+//        IEmployee third = employees.get(2);
 
         //Exercise 1.1 Collections
         List<String> listOfNames = new ArrayList<>();
@@ -169,11 +192,16 @@ public class Main {
         newList.add(5);
         System.out.println(newList);
 
+        //Exercise 2.1 See MainTest
+
+
+
+
 
     }
 
     //Exercise 1.10 Collections
-    private static int tabulateSalaries(List<IEmployee> employees) {
+    private static int tabulateSalaries(Set<IEmployee> employees) {
         int totalSalaries = 0;
         for(IEmployee worker : employees) {
             System.out.println(worker);
@@ -183,7 +211,7 @@ public class Main {
     }
 
     //Exercise 1.10 Collections
-    private static void populateEmployees(Matcher peopleMat, List<IEmployee> employees) {
+    private static void populateEmployees(Matcher peopleMat, Set<IEmployee> employees) {
         while(peopleMat.find()) {
             IEmployee employee = Employee.createEmployee((peopleMat.group()));
             employees.add(employee);

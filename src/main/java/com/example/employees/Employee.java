@@ -4,10 +4,11 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Employee implements IEmployee {
+public abstract class Employee implements IEmployee, ComparableEmployee {
     private static final String PEOPLE_REGEX = "(?<lastName>\\w+),\\s*(?<firstName>\\w+)," +
             "\\s*(?<dob>\\d{1,2}/\\d{1,2}/\\d{4}),\\s*(?<role>\\w+)," +
             "\\s*\\{(?<details>.*)\\}\\n?";
@@ -91,5 +92,37 @@ public abstract class Employee implements IEmployee {
     public String toString() {
         return String.format("%s, %s: %s - %s", lastName, firstName,
                 MONEY_FORMAT.format(getSalary()), MONEY_FORMAT.format(getBonus()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(dob, employee.dob);
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public LocalDate getDob() {
+        return dob;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lastName, firstName, dob);
+    }
+
+    @Override
+    public int compareTo(IEmployee o) {
+        Employee other = (Employee) o;
+        return this.firstName.compareTo(other.firstName);
     }
 }
