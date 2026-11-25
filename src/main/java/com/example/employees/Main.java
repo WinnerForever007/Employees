@@ -24,6 +24,9 @@ public class Main {
             Flintstone5, Wilma5, 3/3/1910, Analyst, {projectCount=9}
             Rubble, Betty, 4/4/1915, CEO, {avgStockPrice=300}
             """;
+    private static Set<IEmployee> employees;
+    private static Map<String, Integer> salaryMap = new HashMap<>();
+    private static Map<String, IEmployee> mapEmployees;
 
 
     public static void main(String[] args) {
@@ -84,8 +87,7 @@ public class Main {
                 .thenComparing(e -> ((Employee) e).getLastName())
                 .thenComparing(e -> ((Employee) e).getFirstName())
                 .thenComparing(e -> ((Employee) e).getDob());
-        Set<IEmployee> employees = new TreeSet<>(employeeComp);
-
+        employees = new TreeSet<>(employeeComp);
 
         //Exercise 2.6 Collections
 //        Set<IEmployee> employees = new LinkedHashSet<>();
@@ -195,9 +197,33 @@ public class Main {
         //Exercise 2.1 See MainTest
 
 
+        System.out.println(salaryMap);
+
+        //Exercise 3.6 Collections
+        mapEmployees = new HashMap<>();
+        for(IEmployee worker : employees) {
+            Employee emp = (Employee) worker;
+            mapEmployees.put(emp.firstName, worker);
+        }
+        System.out.println(getLastName("Fred"));
+        System.out.println(getLastName("GHR"));
+
+        //Exercise 3.7 Collections
+        int s = salaryMap.getOrDefault("Nobody", 0);
+        Integer s1 = salaryMap.get("Nobody");
+        System.out.println(s + " " + s1);
 
 
+    }
 
+    //Exercise 3.6 Collections
+    private static String getLastName(String firstName) {
+        String text = "Unknown";
+        if(mapEmployees.get(firstName) != null) {
+            Employee emp = (Employee) mapEmployees.get(firstName);
+            text = emp.getLastName();
+        }
+        return text;
     }
 
     //Exercise 1.10 Collections
@@ -215,6 +241,8 @@ public class Main {
         while(peopleMat.find()) {
             IEmployee employee = Employee.createEmployee((peopleMat.group()));
             employees.add(employee);
+            Employee emp = (Employee) employee;
+            salaryMap.put(emp.firstName, emp.getSalary());
         }
     }
 
@@ -228,5 +256,9 @@ public class Main {
                 }
             }
         }
+    }
+
+    public static int getSalary(String firstName) {
+       return salaryMap.getOrDefault(firstName, -1);
     }
 }
